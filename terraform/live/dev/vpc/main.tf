@@ -18,8 +18,9 @@ resource "aws_subnet" "dev_back" {
 }
 
 resource "aws_subnet" "dev_front" {
-  vpc_id     = aws_vpc.dev.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id                  = aws_vpc.dev.id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "front"
@@ -43,7 +44,7 @@ resource "aws_security_group" "allow_tls" {
   vpc_id      = aws_vpc.dev.id
 
   dynamic "ingress" {
-    for_each = ["80", "443", "8080"]
+    for_each = ["22", "80", "443", "8080"]
     content {
       from_port   = ingress.value
       to_port     = ingress.value
@@ -65,11 +66,76 @@ resource "aws_security_group" "allow_tls" {
     Name = "allow_tls"
   }
 }
+
+
+
+resource "aws_internet_gateway" "gw_dev" {
+  vpc_id = aws_vpc.dev.id
+
+  tags = {
+    Name = "gw_dev"
+  }
+}
+
+
+resource "aws_eip" "nat_gw_dev_eip" {
+  vpc = true
+}
+
+
+resource "aws_nat_gateway" "nat_gw_dev" {
+  subnet_id     = aws_subnet.dev_front.id
+  allocation_id = aws_eip.nat_gw_dev_eip.allocation_id
+
+  tags = {
+    Name = "gw_NAT_dev"
+  }
+  depends_on = [aws_eip.nat_gw_dev_eip]
+}
+
+resource "aws_route_table" "front" {
+  vpc_id = aws_vpc.dev.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw_dev.id
+  }
+
+  tags = {
+    Name = "frontend-route-table"
+  }
+}
+
+resource "aws_route_table" "back" {
+  vpc_id = aws_vpc.dev.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gw_dev.id
+  }
+
+  tags = {
+    Name = "backend-route-table"
+  }
+}
+
+resource "aws_route_table_association" "front_dev" {
+  subnet_id      = aws_subnet.dev_front.id
+  route_table_id = aws_route_table.front.id
+}
+
+resource "aws_route_table_association" "back_dev" {
+  subnet_id      = aws_subnet.dev_back.id
+  route_table_id = aws_route_table.back.id
+}
+
 # vpc
 
 # subnets
 
 # internet gateway
+
+# nat gateway
 
 # route tables
 
