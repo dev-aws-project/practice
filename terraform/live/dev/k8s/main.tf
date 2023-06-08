@@ -60,7 +60,7 @@ module "eks" {
   #version = "19.5.1"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.24"
+  cluster_version = "1.27"
 
   vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
   #control_plane_subnet_ids       = [data.terraform_remote_state.vpc.outputs.subnet_dev_back_id]
@@ -115,7 +115,7 @@ module "irsa-ebs-csi" {
 resource "aws_eks_addon" "ebs-csi" {
   cluster_name             = module.eks.cluster_name
   addon_name               = "aws-ebs-csi-driver"
-  addon_version            = "v1.5.2-eksbuild.1" #"v1.19.0-eksbuild.2" 
+  addon_version            = "v1.19.0-eksbuild.2" #"v1.5.2-eksbuild.1"
   service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
   tags = {
     "eks_addon" = "ebs-csi"
