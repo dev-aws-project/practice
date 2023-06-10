@@ -66,6 +66,7 @@ module "db_option_group" {
   tags = merge(var.tags, var.db_option_group_tags)
 }
 
+
 module "db_instance" {
   source = "./modules/db_instance"
 
