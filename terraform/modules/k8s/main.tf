@@ -123,20 +123,4 @@ resource "aws_eks_addon" "ebs-csi" {
   }
 }
 
-resource "github_actions_environment" "update_cluster_name" {
-  repository       = "yuryMarket/practice"
-  environment_name = "Default"
-  secret {
-    name  = "CLUSTER_NAME"
-    value = var.cluster_name
-  }
-}
 
-resource "github_actions_environment" "update_cluster_name" {
-  repository       = "yuryMarket/practice"
-  environment_name = "Default"
-  secret {
-    name  = "AWS_REGION"
-    value = var.region
-  }
-}
