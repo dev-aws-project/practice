@@ -58,16 +58,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Docker
-        run: |
-          sudo apt-get upgrade
-          sudo apt-get update
-          sudo apt-get -f install
-
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build 
-          docker tag my-app:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/my-app:${{ github.sha }}
+          docker tag ladder:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/ladder:${{ github.sha }}
 
       - name: Login to ECR
         run: |
@@ -75,7 +69,9 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}/my-app:${{ github.sha }}
+          docker push ${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker push ${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
+          docker push ${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
