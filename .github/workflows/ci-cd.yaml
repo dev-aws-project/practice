@@ -61,7 +61,7 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build 
-          docker tag ladder:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/ladder:${{ github.sha }}
+          docker tag frontend:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
 
       - name: Login to ECR
         run: |
