@@ -1,0 +1,241 @@
+.top-container {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.container-fluid {
+	flex: 1;
+	margin-top: 44px;
+	padding: 0;
+}
+
+.fixed-top {
+    background-color: #db4c3f;
+    box-sizing: border-box;
+	height: 44px;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	border-bottom: 1px solid transparent;
+	background-color: #db4c3f;
+	transition: height .2s ease-in;
+	padding-left: 42px;
+	padding-right: 42px;
+	justify-content: center;
+	width: 100%;
+}
+
+.navbar-container {
+	justify-content: space-between;
+	width: 100%;
+	display: flex;
+}
+
+.navbar-container ul { 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.top-navbar-left {
+	display: flex;
+	align-items: center;
+}
+
+.top-navbar-right {
+	display: flex;
+}
+
+.form-inline input {
+    background-color: #e27065;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+.form-inline input::placeholder {
+    color: #fff;
+    opacity: .75;
+}
+
+.left-nav ul {
+    list-style-type: none;
+}
+
+.left-nav {
+    height: calc(100vh - 44px);
+    padding-top: 30px;
+    overflow-y: auto;
+    background-color: #fafafa;
+}
+
+.left-nav.no-scroll {
+    overflow: hidden;
+}
+
+button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+}
+
+.navbar-toggler,
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    outline: none;
+    box-shadow: none;
+    height: 28px;
+	border-radius: 3px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    color: white;
+}
+
+.navbar-toggler:hover {
+	background-color: hsla(0,0%,100%,.2);
+}
+
+.nav-button {
+	height: 28px;
+    padding: 8px;
+	border-radius: 3px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.nav-button:hover {
+	background-color: hsla(0,0%,100%,.2);
+}
+
+.hidden {
+    max-height: 0;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.plus_add_button {
+    text-decoration: none;
+    text-align: left;
+    width: 100%;
+    margin-left: -2px;
+    padding: 0 0 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    color: grey;
+}
+
+.icon_add {
+    align-items: center;
+    border-radius: 50%;
+    color: #dd4b39;
+    display: inline-flex;
+    height: 17px;
+    justify-content: center;
+    margin-right: 11px;
+    -webkit-transform: translateY(8px);
+    transform: translateY(8px);
+    vertical-align: 7px;
+    width: 17px;
+}
+
+.plus_add_button:hover .icon_add {
+    color: #fff;
+    background-color: #dd4b39;
+}
+
+.plus_add_button:hover {
+    color: #dd4b39;
+}
+
+.nav-search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 6px;
+}
+
+.nav-search .search_icon {
+    position: absolute;
+    cursor: text;
+    left: 5px;
+    top: 50%;
+    -webkit-transform: translateY(-60%);
+    transform: translateY(-60%);
+    height: 21px;
+}
+
+.nav-search input {
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: 0;
+    color: #fff;
+    padding: 5px 0 5px 34px;
+    background: hsla(0,0%,100%,.2);
+    transition: width .2s ease-in, background-color .15s cubic-bezier(.4,0,.2,1);
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.left-nav-container {
+    width: 309px;
+    z-index: 5;
+}
+
+.main-container {
+    flex: 1;
+    padding: 0 12px;
+
+    height: calc(100vh - 44px);
+    overflow: auto;
+}
+
+@media (max-width: 767px) { 
+    .left-nav-container   {
+      position: fixed;
+      display: block;
+      z-index: 5;
+      box-shadow: 0px 0px 9px 3px rgba(41,41,41,.25);
+      transition: box-shadow 0 .25s;
+    }
+
+    .hiddenLeftNav {
+        box-shadow: none;
+    }
+
+    .top-navbar-right {
+        display: none !important;
+    }
+}
+
+form .search_button {
+    display: none;
+    width: 32px;
+    margin-left: -32px;
+}
+
+form:focus-within .search_button {
+    display: inline-block;
+}
+
+.form-inline {
+    display: flex;
+}

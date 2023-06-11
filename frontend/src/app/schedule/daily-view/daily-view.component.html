@@ -1,0 +1,75 @@
+<div class="panel"  role="tabpanel" >
+
+    <header class="view_header">
+        <div class="header_content">
+            <h1>
+                <span class="simple_content">Today</span>
+                <small>{{todayDate | date: 'EEE dd MMM'}}</small>
+            </h1>
+            <div class="header_actions">
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-sort"></i>
+                    </span>
+                    <span class="action_label">Sort</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="tasks_content">
+        <ul class="task_list_items">
+
+            <app-task-daily-list [tasks]="tasks" (closeAddForm)="closeAddTaskForm()" [dnd]="activateDragNDrop" ></app-task-daily-list>
+
+            <ng-container *ngIf="overdue.length>0">
+                <div class="section_header">
+                    <h2><span>Overdue</span></h2>
+                    <div class="section_header__actions">
+                        <button class="reschedule__button" (click)="openSelectDateModal()">Reschedule</button>
+                    </div>
+                </div>
+
+                <app-task-daily-list [tasks]="overdue" [overdue]="true" (closeAddForm)="closeAddTaskForm()" (dragStart)="onDragStart()" (dragEnd)="onDragEnd()"></app-task-daily-list>
+            </ng-container>
+
+            <li>
+                <button type="button" class="plus_add_button" *ngIf="!showAddTaskForm" (click)="openAddTaskForm()">
+                    <span class="icon_add">
+                        <i class="fa fa-plus"></i>
+                    </span>
+                    Add task
+                </button>
+
+                <app-task-form *ngIf="showAddTaskForm" (closeEvent)="closeAddTaskForm()" [date]="todayDate"></app-task-form>
+
+            </li>
+
+            <ng-container *ngIf="collabTasks.length>0">
+                <div class="section_header">
+                    <h2><span>Collaborative tasks</span></h2>
+                </div>
+
+                <app-task-daily-list [tasks]="collabTasks" [collab]="true"></app-task-daily-list>
+            </ng-container>
+
+        </ul>
+    </div>
+
+</div>
+
+<div class="ist-menu context" [class.hidden-context-menu]="!showContextTaskMenu" [ngStyle]="{'left.px': taskContextMenuX, 'top.px': taskContextMenuY}">
+	<ul class="context-menu-project" #taskContext>
+        <li class="context-menu-project-item">
+			<button >
+				<span class="menu_icon">
+					<i class="fa fa-edit"></i>
+				</span>
+				<div class="menu_label">Edit task</div>
+			</button>
+		</li>
+        
+	</ul>
+</div>
+
+<app-date-dialog *ngIf="showSelectDateModal" (closeEvent)="closeSelectDateModal($event)" (cancelEvent)="cancelDateSelection()"></app-date-dialog>

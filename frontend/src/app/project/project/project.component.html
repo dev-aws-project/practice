@@ -1,0 +1,44 @@
+<div class="panel"  role="tabpanel" *ngIf="project">
+    <header class="view_header">
+        <div class="header_content">
+            <h1 class="editable">
+                <span class="simple_content" contenteditable="true">{{project.name}}</span>
+            </h1>
+            <div class="header_actions">
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-comment-o"></i>
+                    </span>
+                    <span class="action_label">Comments</span>
+                </button>
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-sort"></i>
+                    </span>
+                    <span class="action_label">Sort</span>
+                </button>
+                <button type="button" class="sort_button" (click)="openContextMenu($event)">
+                    <span class="icon_sort">
+                        <i class ="fa fa-ellipsis-h"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="tablist">
+        <button class="tablist_elem" [class.selected]="view == 0" (click)="chooseTab(0)">
+          Tasks
+        </button>
+        <button class="tablist_elem" [class.selected]="view == 1" (click)="chooseTab(1)">
+          Habits
+        </button>
+    </div>
+
+    <app-task-list #taskList [project]='project' *ngIf="view == 0"></app-task-list>
+    <app-habit-list [project]='project' *ngIf="view == 1"></app-habit-list>
+    <app-task-list [project]='project' [initTasks]='archivedTasks' [blocked]="true" *ngIf="view == 0 && archivedTasks.length > 0"></app-task-list>
+</div>
+
+<app-context-menu *ngIf="showContextMenu" [elems]="contextMenu" [x]="contextMenuX" [y]="contextMenuY" (closeEvent)="closeContextActionMenu()" (actionEvent)="closeContextMenu($event)"></app-context-menu>
+<app-edit-collabs *ngIf="displayCollabModal && project" (closeEvent)="closeCollabModal()" (collabChange)="updateContextMenu()" [projectId]="project.id"> </app-edit-collabs>

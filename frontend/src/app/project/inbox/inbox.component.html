@@ -1,0 +1,31 @@
+<div class="panel"  role="tabpanel">
+    <header class="view_header">
+        <div class="header_content">
+            <h1 class="editable">
+                <span class="simple_content" contenteditable="true">Inbox</span>
+            </h1>
+            <div class="header_actions">
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-comment-o"></i>
+                    </span>
+                    <span class="action_label">Comments</span>
+                </button>
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-sort"></i>
+                    </span>
+                    <span class="action_label">Sort</span>
+                </button>
+                <button type="button" class="sort_button">
+                    <span class="icon_sort">
+                        <i class ="fa fa-ellipsis-h"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <app-task-list [inbox]='true'></app-task-list>
+    
+</div>
