@@ -47,7 +47,7 @@ jobs:
         run: kubectl config get-contexts
 
       - name: Set kubeconfig context
-        run: kubectl config use-context my-context
+        run: kubectl config use-context ${{ secrets.CLUSTER_NAME }}
 
   build:
     if: github.event_name == 'pull_request'
