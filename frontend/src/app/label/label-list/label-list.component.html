@@ -1,0 +1,48 @@
+<div class="expansion_panel">
+    <div class="expansion_panel__header" style="top: 372px;">
+        <button type="button" class="expansion_panel__toggle" (click)="switchLabelCollapse()">
+            <div class="expansion_panel__toggle_icon">
+                <i class="fa mx-2 text-muted fa-chevron-right"  [class.rotated]="!tree.labelCollapsed"></i>
+            </div>
+            Labels
+        </button>
+        <div class="expansion_panel__actions">
+            <button type="button" class="adder_icon" (click)="openLabelModal()">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="projects" *ngIf="!tree.labelCollapsed" @collapse>
+        <div class="projects_list_container">
+            <ul class="items generic_left_list projects_list">
+				<li *ngIf="draggedId" [dndDropzone]="['label']" (dndDrop)="onDropFirst($event)" class="drag-zone drag_list_item"></li>
+                <ng-container *ngFor="let label of tree.getLabels()">
+                    <li class="project_list_item" [dndDraggable]="label.id" (dndStart)="onDragStart(label.id)" (dndEnd)="onDragEnd()"  
+					dndType="label">
+                        <span class="left_actions">
+                            <button type="button" class="handle" dndHandle>
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                        </span>
+                        <button class="text" (click)="toLabel(label.id)">
+                            <div class="label-color" [style]="'color: ' + label.color +';'">
+                                <i class="fa fa-flip-horizontal fa-tag"></i>
+                            </div>
+                            <span class="project-name">{{label.name}}</span>
+                            <div class="counter_count">{{tree.getNumOfUncompletedTasksByLabel(label.id)}}</div>
+                        </button>
+                        
+                        <button type="button" #contextMenuButton class="icon_more" (click)="openContextMenu($event, label)">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                    </li>
+
+					<li *ngIf="draggedId" [dndDropzone]="['label']" (dndDrop)="onDrop($event, label)" class="drag-zone drag_list_item"></li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<app-context-menu *ngIf="showContextMenu" [elems]="contextMenu" [x]="contextMenuX" [y]="contextMenuY" (closeEvent)="closeContextLabelMenu()" (actionEvent)="closeContextMenu($event)"></app-context-menu>

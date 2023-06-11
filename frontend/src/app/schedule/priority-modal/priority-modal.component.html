@@ -1,0 +1,34 @@
+<div class="modal"
+  tabindex="-1"
+  role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Select priority</h4>
+        <i class="fa fa-question fa-circle"></i>
+      </div>
+      <div class="modal-body">
+        <ul class="context-menu-project" class="form-field">
+            <li class="context-menu-project-item" *ngFor="let p of priorities">
+                <button type="button" (click)="choosePriority(p.priority)">
+                    <span class="menu-icon">
+                        <i class="fa fa-flag" [ngClass]="'priority_'+p.priority"></i>
+                    </span>
+                    <span class="menu_label">{{p.name}}</span>
+                    <span class="menu-icon-select" *ngIf="priority == p.priority">
+                      <i class="fa fa-check"></i>
+                    </span>
+                </button>
+            </li>
+        </ul>
+  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="modal-button" 
+                (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

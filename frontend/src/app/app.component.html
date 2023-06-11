@@ -1,0 +1,71 @@
+<div class="top-container">
+	 <!-- Nav bar -->
+	<div class="fixed-top">
+		<nav class="navbar-container navbar-expand-md">
+			<div class="top-navbar-left" *ngIf="logged">
+				<div>
+					<ul class="navbar-nav">
+						<li class="nav-item nav-item-font py-2">
+							<button class="nav-link nav-button text-white ml-1" (click)="switchHideMenu()"><i class="fa fa-bars"></i></button>
+						</li>
+						<li class="nav-item nav-item-font py-2 d-none d-md-block">
+							<button class="nav-link nav-button text-white ml-1" (click)="toHome()"><i class="fa fa-home"></i></button>
+						</li>
+						<li class="nav-item nav-item-font py-2 nav-search d-none d-md-block">
+							<span class="search_icon">
+								<i class="fa text-white mr-2 fa-search"></i>
+							</span>
+							<form class="form-inline" [formGroup]="searchForm">
+								<input #searchInput class="form-control mr-sm-2" type="search" placeholder="Find" formControlName="search">
+								<button class="search_button" (click)="search()">
+									<i class="fa text-white mr-2 fa-arrow-right"></i>
+								</button>
+							</form>
+						</li>
+					</ul>
+					
+				</div>
+			</div>
+			<ul class="navbar-nav top-navbar-right" *ngIf="logged">
+				<li class="nav-item nav-item-font py-2">
+					<button class="nav-link nav-button top-right-part text-white mr-2" (click)="openAddTaskModal()"><i class="fa top-right-part fa-plus"></i> </button>
+				</li>
+				<li class="nav-item nav-item-font py-2 ">
+					<button class="nav-link nav-button top-right-part text-white mr-2" href="#">
+					<i class="fa top-right-part fa-line-chart" id="status"></i></button>
+				</li>
+				<li class="nav-item nav-item-font py-2 ">
+					<button class="nav-link nav-button top-right-part text-white mr-2" href="#"><i class="fa top-right-part fa-bell"></i> </button>
+				</li>
+				<li class="nav-item nav-item-font py-2 ">
+					<button class="nav-link nav-button top-right-part text-white mr-2" (click)="toSettings()"><i class="fa top-right-part fa-cog"></i></button>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+	<!-- Left navigation -->
+	<div class="container-fluid">
+		<div class="row-container">
+			<div class="left-nav-container" *ngIf="!hideMenu && logged" @menu>
+				<div class="left-nav" [class.no-scroll]="hideScroll">
+						<app-sidebar (projectEvent)="openProjectModal($event)" (labelEvent)="openLabelModal($event)" (filterEvent)="openFilterModal($event)" (closeEvent)="switchHideMenu()" (hideScroll)="switchScroll($event)" [mobile]="smallWindow"></app-sidebar>
+				</div>
+			</div>
+			<div class="main-container">
+				<div class="tab-content">
+					<router-outlet></router-outlet>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<app-project-dialog *ngIf="displayProjectModal" (closeEvent)="closeProjectModal()" [data]="projectData"> </app-project-dialog>
+<app-label-dialog *ngIf="displayLabelModal" (closeEvent)="closeLabelModal()" [data]="labelData"> </app-label-dialog>
+<app-filter-dialog *ngIf="displayFilterModal" (closeEvent)="closeFilterModal()" [data]="filterData"></app-filter-dialog>
+<app-task-dialog *ngIf="displayAddTask" (closeEvent)="closeAddTaskModal()"></app-task-dialog>
+
+<app-delete-dialog *ngIf="deleteService.showDeleteMonit" [name]="deleteService.name" [id]="deleteService.id" (closeEvent)="deleteService.closeModal()" (deleteEvent)="deleteService.delete($event)"></app-delete-dialog>
