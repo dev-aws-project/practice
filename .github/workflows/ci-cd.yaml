@@ -29,7 +29,19 @@ jobs:
           echo "::set-output name=ca_certificate::$ca_certificate"
 
       - name: Create kubeconfig file
-        run: bash create-kubeconfig.sh
+        run: |
+          echo "apiVersion: v1" > kubeconfig.yaml
+          echo "clusters:" >> kubeconfig.yaml
+          echo "  - name: my-cluster" >> kubeconfig.yaml
+          echo "    cluster:" >> kubeconfig.yaml
+          echo "      server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}" >> kubeconfig.yaml
+          echo "      certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}" >> kubeconfig.yaml
+          echo "contexts:" >> kubeconfig.yaml
+          echo "  - name: my-context" >> kubeconfig.yaml
+          echo "    context:" >> kubeconfig.yaml
+          echo "      cluster: my-cluster" >> kubeconfig.yaml
+          echo "      user: aws" >> kubeconfig.yaml
+          echo "current-context: my-context" >> kubeconfig.yaml
 
       - name: Set kubeconfig context
         run: kubectl config use-context my-context
