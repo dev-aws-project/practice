@@ -69,9 +69,9 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
-          docker push ${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
-          docker push ${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice//frontend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice//backend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/notif:${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
