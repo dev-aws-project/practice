@@ -6,7 +6,6 @@ on:
       - opened
 
 env:
-  ECR_REGISTRY: <ECR_REGISTRY>
   AWS_REGION: <AWS_REGION>
 
 jobs:
@@ -18,127 +17,56 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up environment
-        id: setup-env
-        run: |
-          echo "CLUSTER_NAME=$CLUSTER_NAME"  # Подставьте имя кластера из секрета CLUSTER_NAME
-          echo "::set-output name=cluster_name::$CLUSTER_NAME"
-
       - name: Get cluster credentials
         id: get-cluster-credentials
         run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name $CLUSTER_NAME
-          kubectl config use-context $CLUSTER_NAME
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
+          kubectl config use-context ${{ secrets.CLUSTER_NAME }}
           cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
           ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
           echo "::set-output name=cluster_endpoint::$cluster_endpoint"
           echo "::set-output name=ca_certificate::$ca_certificate"
 
       - name: Create kubeconfig file
-        run: |
-          echo "apiVersion: v1
-clusters:
-- cluster:
-    server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}
-    certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}
-  name: $CLUSTER_NAME
-contexts:
-- context:
-    cluster: $CLUSTER_NAME
-    user: my-kubernetes-user
-  name: my-kubernetes-context
-current-context: my-kubernetes-context
-kind: Config
-preferences: {}
-users:
-- name: my-kubernetes-user
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1alpha1
-      command: aws-iam-authenticator
-      args:
-        - "token"
-        - "-i"
-        - $CLUSTER_NAME" > kubeconfig.yaml
+        run: bash create-kubeconfig.sh
 
-  build-and-deploy:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+  build:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up environment
-        id: setup-env
-        run: |
-          echo "CLUSTER_NAME=$CLUSTER_NAME"  # Подставьте имя кластера из секрета CLUSTER_NAME
-          echo "::set-output name=cluster_name::$CLUSTER_NAME"
-
-      - name: Get cluster credentials
-        id: get-cluster-credentials
-        run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name $CLUSTER_NAME
-          kubectl config use-context $CLUSTER_NAME
-          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
-          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
-          echo "::set-output name=ca_certificate::$ca_certificate"
-
-      - name: Create kubeconfig file
-        run: |
-          echo "apiVersion: v1
-clusters:
-- cluster:
-    server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}
-    certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}
-  name: $CLUSTER_NAME
-contexts:
-- context:
-    cluster: $CLUSTER_NAME
-    user: my-kubernetes-user
-  name: my-kubernetes-context
-current-context: my-kubernetes-context
-kind: Config
-preferences: {}
-users:
-- name: my-kubernetes-user
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1alpha1
-      command: aws-iam-authenticator
-      args:
-        - "token"
-        - "-i"
-        - $CLUSTER_NAME" > kubeconfig.yaml
-
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
       - name: Install Docker
         run: |
           sudo apt-get update
           sudo apt-get install -y docker.io
 
-      - name: Build Docker image
+      - name: Build and tag Docker image
         run: |
-          docker build -t my-app:${{ github.sha }} .
-
-      - name: Tag Docker image
-        run: |
-          docker tag my-app:${{ github.sha }} ${{ env.ECR_REGISTRY }}/my-app:${{ github.sha }}
+          docker-compose -f docker-compose.yml build my-app
+          docker tag my-app:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/my-app:${{ github.sha }}
 
       - name: Login to ECR
         run: |
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ env.ECR_REGISTRY }}/my-app:${{ github.sha }}
+          docker push ${{ secrets.ECR_REGISTRY }}/my-app:${{ github.sha }}
 
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f deployment.yaml --kubeconfig kubeconfig.yaml
+  deploy:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Manual deployment trigger
+        id: manual-deploy
+        uses: peter-evans/manual-deploy@v1.2.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+          deployment_file: deployment.yaml
+          kubeconfig_file: kubeconfig.yaml
