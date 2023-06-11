@@ -61,17 +61,19 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build 
-          docker tag ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
+          docker tag frontend:${{ github.sha }} ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker tag backend:${{ github.sha }} ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
+          docker tag notif:${{ github.sha }} ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
       - name: Login to ECR
         run: |
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
-          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/backend:${{ github.sha }}
-          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/notif:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
