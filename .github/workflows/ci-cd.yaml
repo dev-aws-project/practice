@@ -43,6 +43,9 @@ jobs:
           echo "      user: aws" >> kubeconfig.yaml
           echo "current-context: my-context" >> kubeconfig.yaml
 
+      - name: Check available contexts
+        run: kubectl config get-contexts
+
       - name: Set kubeconfig context
         run: kubectl config use-context my-context
 
