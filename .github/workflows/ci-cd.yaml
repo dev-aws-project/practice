@@ -61,7 +61,7 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build 
-          docker tag frontend:${{ github.sha }} ${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker tag ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
 
       - name: Login to ECR
         run: |
