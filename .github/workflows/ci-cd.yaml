@@ -47,7 +47,7 @@ jobs:
         run: kubectl config get-contexts
 
       - name: Set kubeconfig context
-        run: kubectl config use-context ${{ secrets.CLUSTER_NAME }}
+        run: kubectl config use-context arn:aws:eks:${{ secrets.AWS_REGION }}:498561179155:cluster/${{ secrets.CLUSTER_NAME }}
 
   build:
     if: github.event_name == 'pull_request'
