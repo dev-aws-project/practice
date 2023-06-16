@@ -67,11 +67,14 @@ jobs:
 
       - name: Login to ECR
         run: |
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }} --insecure
+          export DOCKER_TLS_VERIFY="0"
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}
 
       - name: Push Docker image to ECR
         run: |
           docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
+          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
