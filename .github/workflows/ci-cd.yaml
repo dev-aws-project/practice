@@ -61,9 +61,9 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build 
-          docker tag ${{ github.repository }}_frontend ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
-          docker tag ${{ github.repository }}_backend ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
-          docker tag ${{ github.repository }}_notif ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
+          docker tag practice_frontend:latest ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
+          docker tag practice_backend:latest ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
+          docker tag practice_notif:latest ${{ secrets.AWS_ACCESS_KEY_ID }}.{{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
       - name: Login to ECR
         run: |
