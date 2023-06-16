@@ -68,6 +68,12 @@ jobs:
           docker tag practice_backend ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
           docker tag practice_notif ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
 
+  push:
+    if: github.event_name == 'pull_request'
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Login to ECR
         run: |
           export DOCKER_TLS_VERIFY="0"
