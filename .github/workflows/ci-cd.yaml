@@ -79,7 +79,7 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag practice_frontend 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
+          docker tag practice_frontend 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:latest
           docker tag practice_backend $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
           docker tag practice_notif $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
@@ -92,7 +92,7 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
+          docker push 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:latest
           docker push $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
