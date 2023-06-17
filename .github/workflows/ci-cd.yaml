@@ -65,25 +65,33 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
       - name: Build Docker images
         run: |
           docker-compose -f docker-compose.yml build
 
       - name: Tag Docker images
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag practice_frontend ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
-          docker tag practice_backend ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
-          docker tag practice_notif ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
-
-      - name: Login to ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+          docker tag practice_frontend $REGISTRY/$REPOSITORY/frontend:${{ github.sha }}
+          docker tag practice_backend $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
+          docker tag practice_notif $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
       - name: Push Docker image to ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
-          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
-          docker push ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
+          docker push REGISTRY/$REPOSITORY/frontend:${{ github.sha }}
+          docker push $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
+          docker push $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
