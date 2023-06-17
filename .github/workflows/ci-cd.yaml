@@ -79,9 +79,9 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag practice_frontend 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
-          docker tag practice_backend $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
-          docker tag practice_notif $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
+          docker tag practice_frontend $REGISTRY/$REPOSITORY:frontend_${{ github.sha }}
+          docker tag practice_backend $REGISTRY/$REPOSITORY:backend_${{ github.sha }}
+          docker tag practice_notif $REGISTRY/$REPOSITORY:notif_${{ github.sha }}
 
       - name: Authenticate your Docker client to your registry
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 498561179155.dkr.ecr.us-east-1.amazonaws.com
@@ -92,9 +92,9 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
-          docker push $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
-          docker push $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
+          docker push $REGISTRY/$REPOSITORY:frontend_${{ github.sha }}
+          docker push $REGISTRY/$REPOSITORY:backend_${{ github.sha }}
+          docker push $REGISTRY/$REPOSITORY:notif_${{ github.sha }}
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
