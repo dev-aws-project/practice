@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Get cluster credentials
         id: get-cluster-credentials
@@ -57,7 +57,7 @@ jobs:
     steps:
       - name: Build and tag Docker image
         run: |
-          docker-compose -f ../../docker-compose.yml build 
+          docker-compose -f docker-compose.yml build 
           docker tag practice_frontend ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/frontend:${{ github.sha }}
           docker tag practice_backend ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/backend:${{ github.sha }}
           docker tag practice_notif ${{ secrets.AWS_ACCESS_KEY_ID }}.${{ secrets.ECR_REGISTRY }}/notif:${{ github.sha }}
@@ -69,7 +69,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
