@@ -87,7 +87,7 @@ jobs:
 
   deploy:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    needs: [push]
+    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
