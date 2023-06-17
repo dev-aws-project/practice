@@ -84,6 +84,9 @@ jobs:
           docker tag practice_backend $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
           docker tag practice_notif $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
+      - name: Authenticate your Docker client to your registry
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 498561179155.dkr.ecr.us-east-1.amazonaws.com
+
       - name: Push Docker image to ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
