@@ -90,7 +90,7 @@ jobs:
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push $REGISTRY/$REPOSITORY/frontend:${{ github.sha }}
+          docker push 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice/frontend:${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY/backend:${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY/notif:${{ github.sha }}
 
