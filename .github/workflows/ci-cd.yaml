@@ -86,7 +86,7 @@ jobs:
       - name: Push Docker image to ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          REPOSITORY: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push REGISTRY/$REPOSITORY/frontend:${{ github.sha }}
