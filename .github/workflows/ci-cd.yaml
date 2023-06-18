@@ -18,7 +18,8 @@ env:
 
 jobs:
   initialize:
-    if: github.event_name == 'pull_request'
+    # if: github.event_name == 'pull_request'
+    if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
     runs-on: ubuntu-latest
 
     steps:
@@ -56,7 +57,8 @@ jobs:
         run: kubectl config use-context arn:aws:eks:${{ secrets.AWS_REGION }}:498561179155:cluster/${{ secrets.CLUSTER_NAME }}
 
   build:
-    if: github.event_name == 'pull_request'
+    # if: github.event_name == 'pull_request'
+    if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
     needs: [initialize]
     runs-on: ubuntu-latest
 
@@ -103,7 +105,8 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:notif_${{ github.sha }}
 
   deploy:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
     needs: [build]
     runs-on: ubuntu-latest
 
