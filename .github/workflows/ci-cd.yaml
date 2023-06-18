@@ -106,9 +106,10 @@ jobs:
 
   deploy:
     # if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
+    #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
     needs: [build]
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion != 'skipped'
 
     steps:
       - name: Manual deployment trigger
