@@ -104,20 +104,19 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:backend_${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY:notif_${{ github.sha }}
 
-  # deploy:
-  #   # if: github.event_name == 'pull_request' && github.event.action == 'closed'
-  #   #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   if: github.event.workflow_run.conclusion != 'skipped'
+  deploy:
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch'
 
-  #   steps:
-  #     - name: Manual deployment trigger
-  #       id: manual-deploy
-  #       uses: peter-evans/manual-deploy@v1.2.0
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         branch: ${{ github.head_ref }}
-  #         deployment_file: deployment.yaml
-  #         kubeconfig_file: kubeconfig.yaml
-  #       run: helm install mychart ../helmchart --values values.yaml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Шаги для установки и деплоя Helm-чарта (замените на свои собственные)
+
+      - name: Deploy Helm Chart
+        run: |
+          helm install ladder ../helmchart --values values.yaml
