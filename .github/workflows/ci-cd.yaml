@@ -124,4 +124,4 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
-          helm install ladder ./helmchart --values values.yaml
+          helm install ladder ./helmchart --values ./helmchart/values.yaml
