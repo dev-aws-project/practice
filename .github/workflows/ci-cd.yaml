@@ -124,5 +124,4 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
-          kubectl config current-context
           helm install ladder ./helmchart --values ./helmchart/values.yaml --kube-context=arn:aws:eks:us-east-1:498561179155:cluster/eks-cluster
