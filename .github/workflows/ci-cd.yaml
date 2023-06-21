@@ -120,3 +120,4 @@ jobs:
           branch: ${{ github.head_ref }}
           deployment_file: deployment.yaml
           kubeconfig_file: kubeconfig.yaml
+        run: helm install mychart ../helmchart --values values.yaml
