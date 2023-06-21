@@ -116,11 +116,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: manual approve
+      - name: Get cluster credentials
+        id: get-cluster-credentials
         run: |
-          echo "Manually approved"
-
-      # Шаги для установки и деплоя Helm-чарта (замените на свои собственные)
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
+          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
+          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
+          echo "::set-output name=ca_certificate::$ca_certificate"
 
       - name: Deploy Helm Chart
         run: |
