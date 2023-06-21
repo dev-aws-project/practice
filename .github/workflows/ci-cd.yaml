@@ -107,6 +107,8 @@ jobs:
   deploy:
     # if: github.event_name == 'pull_request' && github.event.action == 'closed'
     #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
+    environment:
+      name: approvers
     needs: [build]
     runs-on: ubuntu-latest
     if: github.event_name == 'repository_dispatch'
@@ -114,6 +116,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: manual approve
+        run: |
+          echo "Manually approved"
 
       # Шаги для установки и деплоя Helm-чарта (замените на свои собственные)
 
