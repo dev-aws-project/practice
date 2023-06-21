@@ -124,4 +124,5 @@ jobs:
 
       - name: Deploy Helm Chart
         run: |
+          kubectl config current-context
           helm install ladder ./helmchart --values ./helmchart/values.yaml
