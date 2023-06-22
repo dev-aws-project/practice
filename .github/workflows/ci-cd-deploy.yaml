@@ -7,9 +7,9 @@ name: Deploy Pipeline
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   run-manually:
-    #     description: "Run job manually"
+    inputs:
+      run-manually:
+        description: "Run job manually"
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -59,9 +59,6 @@ jobs:
   deploy:
     # if: github.event_name == 'pull_request' && github.event.action == 'closed'
     #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
-    needs: [build]
-    environment:
-      name: approvers
     runs-on: ubuntu-latest
 
     steps:
