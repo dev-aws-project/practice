@@ -93,6 +93,11 @@ resource "aws_route_table" "kuber_1a" {
     gateway_id = aws_internet_gateway.gw_kuber.id
   }
 
+  route {
+    cidr_block                = "11.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peering_kuber_rds_dev.id
+  }
+
   tags = {
     Name = "kuber_1a-route-table"
   }
@@ -104,6 +109,11 @@ resource "aws_route_table" "kuber_1b" {
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gw_kuber.id
+  }
+
+  route {
+    cidr_block                = "11.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peering_kuber_rds_dev.id
   }
 
   tags = {
@@ -123,7 +133,7 @@ resource "aws_route_table_association" "kuber_1b" {
 
 
 resource "aws_vpc" "rds_dev" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = "11.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
@@ -131,9 +141,17 @@ resource "aws_vpc" "rds_dev" {
   }
 }
 
+resource "aws_vpc_peering_connection" "peering_kuber_rds_dev" {
+  peer_vpc_id = aws_vpc.rds_dev.id
+  vpc_id      = aws_vpc.kuber.id
+  auto_accept = true
+
+  depends_on = [aws_vpc.kuber, aws_vpc.rds_dev]
+}
+
 resource "aws_subnet" "rds_dev_1a" {
   vpc_id                  = aws_vpc.rds_dev.id
-  cidr_block              = "10.0.4.0/24"
+  cidr_block              = "11.0.4.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
@@ -205,6 +223,16 @@ resource "aws_route_table" "rds_dev_1a" {
     gateway_id = aws_internet_gateway.gw_rds_dev_1a.id
   }
 
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw_rds_dev_1a.id
+  }
+
+  route {
+    cidr_block                = "10.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peering_kuber_rds_dev.id
+  }
+
   tags = {
     Name = "rds_dev_1a-route-table"
   }
@@ -220,7 +248,7 @@ resource "aws_route_table_association" "rds_dev_1a" {
 
 resource "aws_subnet" "rds_dev_1b" {
   vpc_id                  = aws_vpc.rds_dev.id
-  cidr_block              = "10.0.5.0/24"
+  cidr_block              = "11.0.5.0/24"
   availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
@@ -279,6 +307,11 @@ resource "aws_route_table" "rds_dev_1b" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw_rds_dev_1a.id
+  }
+
+  route {
+    cidr_block                = "10.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peering_kuber_rds_dev.id
   }
 
   tags = {
