@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notif-ladder
+  labels:
+    app: notif
+spec:
+  selector:
+    matchLabels:
+      project: notif
+  template:
+    metadata:
+      labels:
+        project: notif # Service will look for those PODS Labels!!!
+    spec:
+      containers:
+        - name: notif
+          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:notif_274e07847da60ea5a58bea10d1ad4cee51489006
+          ports:
+            - containerPort: 8081
