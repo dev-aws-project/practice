@@ -1,0 +1,82 @@
+name: Deploy Pipeline
+
+# on:
+#   pull_request:
+#     types:
+#       - opened
+
+on:
+  workflow_dispatch:
+    inputs:
+      run-manually:
+        description: "Run job manually"
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  initialize:
+    # if: github.event_name == 'pull_request'
+    if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get cluster credentials
+        id: get-cluster-credentials
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
+          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
+          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
+          echo "::set-output name=ca_certificate::$ca_certificate"
+
+      - name: Create kubeconfig file
+        run: |
+          echo "apiVersion: v1" > kubeconfig.yaml
+          echo "clusters:" >> kubeconfig.yaml
+          echo "  - name: my-cluster" >> kubeconfig.yaml
+          echo "    cluster:" >> kubeconfig.yaml
+          echo "      server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}" >> kubeconfig.yaml
+          echo "      certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}" >> kubeconfig.yaml
+          echo "contexts:" >> kubeconfig.yaml
+          echo "  - name: my-context" >> kubeconfig.yaml
+          echo "    context:" >> kubeconfig.yaml
+          echo "      cluster: my-cluster" >> kubeconfig.yaml
+          echo "      user: aws" >> kubeconfig.yaml
+          echo "current-context: my-context" >> kubeconfig.yaml
+
+      - name: Check available contexts
+        run: kubectl config get-contexts
+
+      - name: Set kubeconfig context
+        run: kubectl config use-context arn:aws:eks:${{ secrets.AWS_REGION }}:498561179155:cluster/${{ secrets.CLUSTER_NAME }}
+
+  deploy:
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
+    needs: [build]
+    environment:
+      name: approvers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get cluster credentials
+        id: get-cluster-credentials
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
+          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
+          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
+          echo "::set-output name=ca_certificate::$ca_certificate"
+
+      - name: Deploy Helm Chart
+        run: |
+          helm upgrade --install ladder ./helmchart --values ./helmchart/values.yaml --kube-context=arn:aws:eks:us-east-1:498561179155:cluster/eks-cluster

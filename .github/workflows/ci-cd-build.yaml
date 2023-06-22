@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build Pipeline
 
 # on:
 #   pull_request:
@@ -103,28 +103,3 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:frontend_${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY:backend_${{ github.sha }}
           docker push $REGISTRY/$REPOSITORY:notif_${{ github.sha }}
-
-  deploy:
-    # if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    #if: github.event.inputs.run-manually == 'true' || github.event.inputs.run-manually == true
-    needs: [build]
-    environment:
-      name: approvers
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Get cluster credentials
-        id: get-cluster-credentials
-        run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
-          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
-          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
-          echo "::set-output name=ca_certificate::$ca_certificate"
-
-      - name: Deploy Helm Chart
-        run: |
-          helm install ladder ./helmchart --values ./helmchart/values.yaml --kube-context=arn:aws:eks:us-east-1:498561179155:cluster/eks-cluster
