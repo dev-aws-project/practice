@@ -9,7 +9,7 @@ data "terraform_remote_state" "ingress_controller" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.primary.zone_id
+  zone_id = "Z07606132J83HBCKKYO55"
   name    = "ladder"
   type    = "CNAME"
   ttl     = 300
