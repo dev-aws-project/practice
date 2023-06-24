@@ -13,6 +13,55 @@ resource "helm_release" "nginx-ingress-controller" {
 
 }
 
+resource "kubernetes_ingress_v1" "ladder_ingress" {
+  metadata {
+    name = "ladder-ingress"
+  }
+
+  spec {
+    rule {
+      http {
+        path {
+          backend {
+            service {
+              name = "svc-frontend"
+              port {
+                number = 80
+              }
+            }
+          }
+          path = "/*"
+        }
+
+        path {
+          backend {
+            service {
+              name = "svc-backend"
+              port {
+                number = 8080
+              }
+            }
+          }
+          path = "/*"
+        }
+
+        path {
+          backend {
+            service {
+              name = "svc-notif"
+              port {
+                number = 8081
+              }
+            }
+          }
+          path = "/*"
+        }
+      }
+    }
+  }
+  depends_on = [helm_release.nginx-ingress-controller]
+}
+
 data "kubernetes_service" "ingress_nginx" {
 
   metadata {

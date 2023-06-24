@@ -101,6 +101,7 @@ resource "aws_route_table" "kuber_1a" {
   tags = {
     Name = "kuber_1a-route-table"
   }
+  depends_on = [aws_vpc_peering_connection.peering_kuber_rds_dev]
 }
 
 resource "aws_route_table" "kuber_1b" {
@@ -119,6 +120,7 @@ resource "aws_route_table" "kuber_1b" {
   tags = {
     Name = "kuber_1b-route-table"
   }
+  depends_on = [aws_vpc_peering_connection.peering_kuber_rds_dev]
 }
 
 resource "aws_route_table_association" "kuber_1a" {
@@ -236,6 +238,7 @@ resource "aws_route_table" "rds_dev_1a" {
   tags = {
     Name = "rds_dev_1a-route-table"
   }
+  depends_on = [aws_vpc_peering_connection.peering_kuber_rds_dev]
 }
 
 
@@ -317,6 +320,7 @@ resource "aws_route_table" "rds_dev_1b" {
   tags = {
     Name = "rds_dev_1b-route-table"
   }
+  depends_on = [aws_vpc_peering_connection.peering_kuber_rds_dev]
 }
 
 
