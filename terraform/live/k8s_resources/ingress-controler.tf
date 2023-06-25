@@ -16,11 +16,14 @@ resource "helm_release" "nginx-ingress-controller" {
 resource "kubernetes_ingress_v1" "ladder_ingress" {
   metadata {
     name = "ladder-ingress"
-  }
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+    }
 
+  }
   spec {
     rule {
-      host = "prtest.be"
+      host = "a92de7400c6274136a24cdcd854733d4-1217110197.us-east-1.elb.amazonaws.com"
       http {
         path {
           backend {
@@ -34,29 +37,29 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
           path = "/*"
         }
 
-        path {
-          backend {
-            service {
-              name = "svc-backend"
-              port {
-                number = 8080
-              }
-            }
-          }
-          path = "/*"
-        }
+        # path {
+        #   backend {
+        #     service {
+        #       name = "svc-backend"
+        #       port {
+        #         number = 8080
+        #       }
+        #     }
+        #   }
+        #   path = "/*"
+        # }
 
-        path {
-          backend {
-            service {
-              name = "svc-notif"
-              port {
-                number = 8081
-              }
-            }
-          }
-          path = "/*"
-        }
+        # path {
+        #   backend {
+        #     service {
+        #       name = "svc-notif"
+        #       port {
+        #         number = 8081
+        #       }
+        #     }
+        #   }
+        #   path = "/*"
+        # }
       }
     }
   }
