@@ -23,7 +23,7 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
   }
   spec {
     rule {
-      host = "a92de7400c6274136a24cdcd854733d4-1217110197.us-east-1.elb.amazonaws.com"
+      host = "a41a8b9d0dcd54beeab5a623136c49ea-612223084.us-east-1.elb.amazonaws.com"
       http {
         path {
           backend {
@@ -34,7 +34,7 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
               }
             }
           }
-          path = "/*"
+          path = "/"
         }
 
         # path {
