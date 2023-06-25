@@ -20,6 +20,7 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
 
   spec {
     rule {
+      host = "prtest.be"
       http {
         path {
           backend {
