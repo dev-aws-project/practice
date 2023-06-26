@@ -23,7 +23,7 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
   }
   spec {
     rule {
-      host = "a41a8b9d0dcd54beeab5a623136c49ea-612223084.us-east-1.elb.amazonaws.com"
+      host = "prtest.be"
       http {
         path {
           backend {
