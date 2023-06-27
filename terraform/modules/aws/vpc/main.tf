@@ -69,21 +69,29 @@ resource "aws_internet_gateway" "gw_kuber" {
   }
 }
 
+# resource "aws_internet_gateway" "gw_kuber_2" {
+#   vpc_id = aws_vpc.kuber.id
 
-resource "aws_eip" "nat_gw_kuber_eip" {
-  vpc = true
-}
+#   tags = {
+#     Name = "gw_kuber_2"
+#   }
+# }
 
 
-resource "aws_nat_gateway" "nat_gw_kuber" {
-  subnet_id     = aws_subnet.kuber_1a.id
-  allocation_id = aws_eip.nat_gw_kuber_eip.allocation_id
+# resource "aws_eip" "nat_gw_kuber_eip" {
+#   vpc = true
+# }
 
-  tags = {
-    Name = "gw_NAT_kuber"
-  }
-  depends_on = [aws_eip.nat_gw_kuber_eip]
-}
+
+# resource "aws_nat_gateway" "nat_gw_kuber" {
+#   subnet_id     = aws_subnet.kuber_1a.id
+#   allocation_id = aws_eip.nat_gw_kuber_eip.allocation_id
+
+#   tags = {
+#     Name = "gw_NAT_kuber"
+#   }
+#   depends_on = [aws_eip.nat_gw_kuber_eip]
+# }
 
 resource "aws_route_table" "kuber_1a" {
   vpc_id = aws_vpc.kuber.id
@@ -108,8 +116,8 @@ resource "aws_route_table" "kuber_1b" {
   vpc_id = aws_vpc.kuber.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw_kuber.id
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw_kuber.id
   }
 
   route {
