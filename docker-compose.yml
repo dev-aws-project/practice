@@ -14,8 +14,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=dbadmin
       - SPRING_DATASOURCE_PASSWORD=dbadmin
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - FRONTEND_HOST=http://a0ad153073adb4bf5821ebfcb835fba4-1904609734.us-east-1.elb.amazonaws.com/
-      - SERVICE_NOTIFICATION_HOST=http://a0ad153073adb4bf5821ebfcb835fba4-1904609734.us-east-1.elb.amazonaws.com/:8081
+      - FRONTEND_HOST=http://ladder.prtest.be/
+      - SERVICE_NOTIFICATION_HOST=http://ladder.prtest.be/:8081
   notif:
     build: ./notification-service/
     container_name: notif
