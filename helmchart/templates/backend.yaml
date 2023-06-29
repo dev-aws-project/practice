@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:backend_6d05edf5bb7da81212cf123b0e2f86a076d7c76d
+          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:backend_109dde1a0c76b405ee493e3426f375822ba5afd0
           daemon: true
           ports:
             - containerPort: 8080
