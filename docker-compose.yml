@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL= jdbc:postgresql://dev.ch5k3r3kyzit.us-east-1.rds.amazonaws.com:5432/ladder
+      - SPRING_DATASOURCE_URL= jdbc:postgresql://dev.ch5k3r3kyzit.us-east-1.rds.amazonaws.com:5432
       - SPRING_DATASOURCE_USERNAME=portgres
       - SPRING_DATASOURCE_PASSWORD=portgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
