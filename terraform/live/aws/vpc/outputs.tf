@@ -29,3 +29,7 @@ output "subnet_rds_dev_1b_id" {
 output "security_group_rds_dev_1b_id" {
   value = module.vpc.security_group_rds_dev_1b_id
 }
+
+output "security_group_allow_tls_id" {
+  value = module.vpc.security_group_allow_tls_id
+}
