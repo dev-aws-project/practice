@@ -1,6 +1,7 @@
 resource "aws_vpc" "kuber" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
+  cidr_block           = "10.0.0.0/16"
+  instance_tenancy     = "default"
+  enable_dns_hostnames = true
 
   tags = {
     Name = "kuber"
@@ -37,7 +38,7 @@ resource "aws_security_group" "allow_tls" {
   vpc_id      = aws_vpc.kuber.id
 
   dynamic "ingress" {
-    for_each = ["22", "80", "443", "8080", "8081"]
+    for_each = ["22", "80", "443", "8080", "8081", "5432"]
     content {
       from_port   = ingress.value
       to_port     = ingress.value

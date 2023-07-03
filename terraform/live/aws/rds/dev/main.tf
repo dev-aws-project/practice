@@ -5,7 +5,7 @@ module "rds" {
   db_subnet_group_name            = "rds-dev"
   db_subnet_group_use_name_prefix = false
   db_subnet_group_description     = "Subnet group for RDS dev"
-  subnet_ids                      = [data.terraform_remote_state.vpc.outputs.subnet_rds_dev_1a_id, data.terraform_remote_state.vpc.outputs.subnet_rds_dev_1b_id]
+  subnet_ids                      = [data.terraform_remote_state.vpc.outputs.subnet_kuber_1a_id, data.terraform_remote_state.vpc.outputs.subnet_kuber_1b_id]
 
 
   create_db_parameter_group = false
@@ -13,7 +13,7 @@ module "rds" {
   create_db_option_group = false
 
   create_db_instance             = true
-  identifier                     = "dev"
+  identifier                     = "ladder"
   instance_use_identifier_prefix = false
 
   engine            = "postgres"
@@ -23,15 +23,15 @@ module "rds" {
   storage_type      = "gp2"
   storage_encrypted = true
 
-  db_name                = "dev"
-  username               = "dbadmin"
-  password               = "dbadmin"
+  db_name                = "ladder"
+  username               = "postgres"
+  password               = "postgres"
   port                   = "5432"
-  vpc_security_group_ids = [data.terraform_remote_state.vpc.outputs.security_group_rds_dev_1a_id, data.terraform_remote_state.vpc.outputs.security_group_rds_dev_1b_id]
+  vpc_security_group_ids = [data.terraform_remote_state.vpc.outputs.security_group_allow_tls_id]
 
 
-  #publicly_accessible = true
-  apply_immediately = true
+  publicly_accessible = true
+  apply_immediately   = true
 
 
   skip_final_snapshot = true

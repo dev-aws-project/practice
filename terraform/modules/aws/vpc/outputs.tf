@@ -30,3 +30,9 @@ output "security_group_rds_dev_1b_id" {
   value = aws_security_group.rds_dev_1b.id
 }
 
+
+
+output "security_group_allow_tls_id" {
+  value = aws_security_group.allow_tls.id
+}
+
