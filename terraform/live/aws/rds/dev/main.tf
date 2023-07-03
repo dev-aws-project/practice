@@ -24,8 +24,8 @@ module "rds" {
   storage_encrypted = true
 
   db_name                = "ladder"
-  username               = "postgres"
-  password               = "postgres"
+  username               = "dbmainuser"
+  password               = "dbmainuser"
   port                   = "5432"
   vpc_security_group_ids = [data.terraform_remote_state.vpc.outputs.security_group_allow_tls_id]
 
