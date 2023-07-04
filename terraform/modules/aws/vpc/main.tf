@@ -211,20 +211,20 @@ resource "aws_internet_gateway" "gw_rds_dev_1a" {
 }
 
 
-resource "aws_eip" "nat_gw_rds_dev_1a_eip" {
-  vpc = true
-}
+# resource "aws_eip" "nat_gw_rds_dev_1a_eip" {
+#   vpc = true
+# }
 
 
-resource "aws_nat_gateway" "nat_gw_rds_dev_1a" {
-  subnet_id     = aws_subnet.rds_dev_1a.id
-  allocation_id = aws_eip.nat_gw_rds_dev_1a_eip.allocation_id
+# resource "aws_nat_gateway" "nat_gw_rds_dev_1a" {
+#   subnet_id     = aws_subnet.rds_dev_1a.id
+#   allocation_id = aws_eip.nat_gw_rds_dev_1a_eip.allocation_id
 
-  tags = {
-    Name = "gw_NAT_rds_dev_1a"
-  }
-  depends_on = [aws_eip.nat_gw_rds_dev_1a_eip]
-}
+#   tags = {
+#     Name = "gw_NAT_rds_dev_1a"
+#   }
+#   depends_on = [aws_eip.nat_gw_rds_dev_1a_eip]
+# }
 
 resource "aws_route_table" "rds_dev_1a" {
   vpc_id = aws_vpc.rds_dev.id
@@ -298,20 +298,20 @@ resource "aws_security_group" "rds_dev_1b" {
   }
 }
 
-resource "aws_eip" "nat_gw_rds_dev_1b_eip" {
-  vpc = true
-}
+# resource "aws_eip" "nat_gw_rds_dev_1b_eip" {
+#   vpc = true
+# }
 
 
-resource "aws_nat_gateway" "nat_gw_rds_dev_1b" {
-  subnet_id     = aws_subnet.rds_dev_1b.id
-  allocation_id = aws_eip.nat_gw_rds_dev_1b_eip.allocation_id
+# resource "aws_nat_gateway" "nat_gw_rds_dev_1b" {
+#   subnet_id     = aws_subnet.rds_dev_1b.id
+#   allocation_id = aws_eip.nat_gw_rds_dev_1b_eip.allocation_id
 
-  tags = {
-    Name = "gw_NAT_rds_dev_1b"
-  }
-  depends_on = [aws_eip.nat_gw_rds_dev_1b_eip]
-}
+#   tags = {
+#     Name = "gw_NAT_rds_dev_1b"
+#   }
+#   depends_on = [aws_eip.nat_gw_rds_dev_1b_eip]
+# }
 
 resource "aws_route_table" "rds_dev_1b" {
   vpc_id = aws_vpc.rds_dev.id
