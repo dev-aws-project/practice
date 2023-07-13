@@ -1,7 +1,0 @@
-{
-    "yaml.schemas": {
-        "https://json.schemastore.org/yamllint.json": "file:///home/yury/dev-aws-project/practice/terraform/live/k8s_resources/values/prometheus.yaml",
-        "https://json.schemastore.org/github-workflow.json": "file:///home/yury/dev-aws-project/practice/.github/workflows/ci-cd.yaml",
-        "https://json.schemastore.org/helmfile.json": "file:///home/yury/dev-aws-project/practice/terraform/live/prometheus/values/prometheus.yaml"
-    }
-}
