@@ -57,3 +57,9 @@ variable "postprocessing_playbook_params" {
   default     = null
 }
 
+variable "db_users" {
+  default = [
+    { name = "backend", inherit = true, login = true, membership = ["app_write_role"], validity = "infinity", connection_limit = -1, createrole = false },
+  ]
+}
+
