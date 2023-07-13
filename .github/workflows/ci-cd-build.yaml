@@ -11,10 +11,10 @@ on:
       run-manually:
         description: "Run job manually"
 
-env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# env:
+#   AWS_REGION: ${{ secrets.AWS_REGION }}
+#   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
   initialize:
@@ -26,35 +26,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get cluster credentials
-        id: get-cluster-credentials
-        run: |
-          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
-          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-          ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
-          echo "::set-output name=cluster_endpoint::$cluster_endpoint"
-          echo "::set-output name=ca_certificate::$ca_certificate"
+      # - name: Get cluster credentials
+      #   id: get-cluster-credentials
+      #   run: |
+      #     aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ secrets.CLUSTER_NAME }}
+      #     cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+      #     ca_certificate=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster."certificate-authority-data"}')
+      #     echo "::set-output name=cluster_endpoint::$cluster_endpoint"
+      #     echo "::set-output name=ca_certificate::$ca_certificate"
 
-      - name: Create kubeconfig file
-        run: |
-          echo "apiVersion: v1" > kubeconfig.yaml
-          echo "clusters:" >> kubeconfig.yaml
-          echo "  - name: my-cluster" >> kubeconfig.yaml
-          echo "    cluster:" >> kubeconfig.yaml
-          echo "      server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}" >> kubeconfig.yaml
-          echo "      certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}" >> kubeconfig.yaml
-          echo "contexts:" >> kubeconfig.yaml
-          echo "  - name: my-context" >> kubeconfig.yaml
-          echo "    context:" >> kubeconfig.yaml
-          echo "      cluster: my-cluster" >> kubeconfig.yaml
-          echo "      user: aws" >> kubeconfig.yaml
-          echo "current-context: my-context" >> kubeconfig.yaml
+      # - name: Create kubeconfig file
+      #   run: |
+      #     echo "apiVersion: v1" > kubeconfig.yaml
+      #     echo "clusters:" >> kubeconfig.yaml
+      #     echo "  - name: my-cluster" >> kubeconfig.yaml
+      #     echo "    cluster:" >> kubeconfig.yaml
+      #     echo "      server: ${{ steps.get-cluster-credentials.outputs.cluster_endpoint }}" >> kubeconfig.yaml
+      #     echo "      certificate-authority-data: ${{ steps.get-cluster-credentials.outputs.ca_certificate }}" >> kubeconfig.yaml
+      #     echo "contexts:" >> kubeconfig.yaml
+      #     echo "  - name: my-context" >> kubeconfig.yaml
+      #     echo "    context:" >> kubeconfig.yaml
+      #     echo "      cluster: my-cluster" >> kubeconfig.yaml
+      #     echo "      user: aws" >> kubeconfig.yaml
+      #     echo "current-context: my-context" >> kubeconfig.yaml
 
-      - name: Check available contexts
-        run: kubectl config get-contexts
+      # - name: Check available contexts
+      #   run: kubectl config get-contexts
 
-      - name: Set kubeconfig context
-        run: kubectl config use-context arn:aws:eks:${{ secrets.AWS_REGION }}:498561179155:cluster/${{ secrets.CLUSTER_NAME }}
+      # - name: Set kubeconfig context
+      #   run: kubectl config use-context arn:aws:eks:${{ secrets.AWS_REGION }}:498561179155:cluster/${{ secrets.CLUSTER_NAME }}
 
   build:
     # if: github.event_name == 'pull_request'
@@ -66,12 +66,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       # - name: Login to ECR
       #   id: login-ecr
