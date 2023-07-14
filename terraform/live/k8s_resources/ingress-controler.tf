@@ -13,13 +13,12 @@ resource "helm_release" "nginx-ingress-controller" {
 
 }
 
-resource "kubernetes_ingress_v1" "ladder_ingress" {
+resource "kubernetes_ingress_v1" "frontend_ingress" {
   metadata {
-    name = "ladder-ingress"
+    name = "frontend-ingress"
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"
     }
-
   }
   spec {
     rule {
@@ -36,35 +35,68 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
           }
           path = "/"
         }
-
-        path {
-          backend {
-            service {
-              name = "svc-backend"
-              port {
-                number = 8080
-              }
-            }
-          }
-          path = "/*"
-        }
-
-        path {
-          backend {
-            service {
-              name = "svc-notif"
-              port {
-                number = 8081
-              }
-            }
-          }
-          path = "/*"
-        }
       }
     }
   }
   depends_on = [helm_release.nginx-ingress-controller]
 }
+
+# resource "kubernetes_ingress_v1" "backend_ingress" {
+#   metadata {
+#     name = "backend-ingress"
+#     annotations = {
+#       "kubernetes.io/ingress.class" = "nginx"
+#     }
+#   }
+#   spec {
+#     rule {
+#       host = "ladder.prtest.be"
+#       http {
+#         path {
+#           backend {
+#             service {
+#               name = "svc-backend"
+#               port {
+#                 number = 8080
+#               }
+#             }
+#           }
+#           path = "/backend"
+#         }
+#       }
+#     }
+#   }
+#   depends_on = [helm_release.nginx-ingress-controller]
+# }
+
+# resource "kubernetes_ingress_v1" "notif_ingress" {
+#   metadata {
+#     name = "notif-ingress"
+#     annotations = {
+#       "kubernetes.io/ingress.class" = "nginx"
+#     }
+#   }
+#   spec {
+#     rule {
+#       host = "ladder.prtest.be"
+#       http {
+#         path {
+#           backend {
+#             service {
+#               name = "svc-notif"
+#               port {
+#                 number = 8081
+#               }
+#             }
+#           }
+#           path = "/notif"
+#         }
+#       }
+#     }
+#   }
+
+#   depends_on = [helm_release.nginx-ingress-controller]
+# }
 
 data "kubernetes_service" "ingress_nginx" {
 
