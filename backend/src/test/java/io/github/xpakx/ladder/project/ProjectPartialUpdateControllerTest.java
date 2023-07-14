@@ -47,7 +47,7 @@ public class ProjectPartialUpdateControllerTest {
 
     @BeforeEach
     void setUp() {
-        baseUrl = "http://localhost".concat(":").concat(port + "");
+        baseUrl = "http://ladder.prtest.be".concat(":").concat(port + "");
         UserAccount user = UserAccount.builder()
                 .username("user1")
                 .password("password")
