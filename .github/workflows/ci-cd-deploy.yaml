@@ -10,11 +10,14 @@ on:
     inputs:
       run-manually:
         description: "Run job manually"
+      image:
+        description: " Postfix image"
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  PARAMETER: ${{ env.MY_PARAMETER }}
 
 jobs:
   initialize:

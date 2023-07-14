@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: notif
-          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:notif_227ee58b108649bda75874f0890115dce2bf1352
+          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:notif_${{ github.event.inputs.flutter_version }}
           ports:
             - containerPort: 8081
