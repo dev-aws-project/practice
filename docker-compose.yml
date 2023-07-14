@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=backend
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - FRONTEND_HOST=http://ladder.prtest.be/
-      - SERVICE_NOTIFICATION_HOST=http://ladder.prtest.be/:8081
+      - SERVICE_NOTIFICATION_HOST=http://ladder.prtest.be:8081
   notif:
     build: ./notification-service/
     container_name: notif
