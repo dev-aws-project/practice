@@ -37,29 +37,29 @@ resource "kubernetes_ingress_v1" "ladder_ingress" {
           path = "/"
         }
 
-        # path {
-        #   backend {
-        #     service {
-        #       name = "svc-backend"
-        #       port {
-        #         number = 8080
-        #       }
-        #     }
-        #   }
-        #   path = "/*"
-        # }
+        path {
+          backend {
+            service {
+              name = "svc-backend"
+              port {
+                number = 8080
+              }
+            }
+          }
+          path = "/*"
+        }
 
-        # path {
-        #   backend {
-        #     service {
-        #       name = "svc-notif"
-        #       port {
-        #         number = 8081
-        #       }
-        #     }
-        #   }
-        #   path = "/*"
-        # }
+        path {
+          backend {
+            service {
+              name = "svc-notif"
+              port {
+                number = 8081
+              }
+            }
+          }
+          path = "/*"
+        }
       }
     }
   }
