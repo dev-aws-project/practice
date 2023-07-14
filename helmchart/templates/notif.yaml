@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: notif
-          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:notif_2f53c0307b43b45f7a983f0aaf5346108bf1e67a
+          image: 498561179155.dkr.ecr.us-east-1.amazonaws.com/practice:notif_6d04192506d895653ab2ca8d67f33db1c6fa949c
           ports:
             - containerPort: 8081
