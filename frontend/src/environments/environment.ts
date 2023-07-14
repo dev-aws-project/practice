@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiServerUrl: "http://svc-backend",
-  notificationServerUrl: "http://svc-notif:8081"
+  apiServerUrl: "http://svc-backend.default.svc.cluster.local",
+  notificationServerUrl: "http://svc-notif.default.svc.cluster.local"
 };
 
 /*
