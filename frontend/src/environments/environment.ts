@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiServerUrl: "http://svc-backend:8080",
+  apiServerUrl: "http://svc-backend",
   notificationServerUrl: "http://svc-notif:8081"
 };
 
