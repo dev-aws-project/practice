@@ -75,7 +75,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("http://ladder.prtest.be:4200", frontend)
+                        .allowedOrigins("http://localhost:4200", frontend)
                         .allowedMethods("GET", "POST", "DELETE", "PUT");
             }
         };
