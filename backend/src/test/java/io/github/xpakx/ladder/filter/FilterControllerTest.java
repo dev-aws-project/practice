@@ -45,7 +45,7 @@ class FilterControllerTest {
 
     @BeforeEach
     void setUp() {
-        baseUrl = "http://ladder.prtest.be".concat(":").concat(port + "");
+        baseUrl = "http://localhost".concat(":").concat(port + "");
         UserAccount user = UserAccount.builder()
                 .username("user1")
                 .password("password")

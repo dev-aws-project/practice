@@ -53,7 +53,7 @@ public class TaskDailyControllerTest {
 
     @BeforeEach
     void setUp() {
-        baseUrl = "http://ladder.prtest.be".concat(":").concat(port + "");
+        baseUrl = "http://llocalhost".concat(":").concat(port + "");
         UserAccount user = UserAccount.builder()
                 .username("user1")
                 .password("password")
